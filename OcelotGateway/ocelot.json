@@ -1,0 +1,98 @@
+{
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:5003"
+  },
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/gateway/students",
+      "UpstreamHttpMethod": [ "Get" ],
+      "AddHeadersToRequest": {
+        "X-Ref-Id": "{Request.Headers.X-Ref-Id}"
+      },
+      "DownstreamPathTemplate": "/api/student",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "studentservice",
+          "Port": 80
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/students/{Id}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "AddHeadersToRequest": {
+        "X-Ref-Id": "{Request.Headers.X-Ref-Id}"
+      },
+      "DownstreamPathTemplate": "/api/student/{Id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "studentservice",
+          "Port": 80
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/teachers",
+      "UpstreamHttpMethod": [ "Get" ],
+      "AddHeadersToRequest": {
+        "X-Ref-Id": "{Request.Headers.X-Ref-Id}"
+      },
+      "DownstreamPathTemplate": "/api/teacher",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "teacherservice",
+          "Port": 80
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/teacher/{Id}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "AddHeadersToRequest": {
+        "X-Ref-Id": "{Request.Headers.X-Ref-Id}"
+      },
+      "DownstreamPathTemplate": "/api/teachers/{Id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "teacherservice",
+          "Port": 80
+        }
+      ]
+    },
+
+    {
+      "UpstreamPathTemplate": "/gateway/clazz",
+      "UpstreamHttpMethod": [ "Get" ],
+      "AddHeadersToRequest": {
+        "X-Ref-Id": "{Request.Headers.X-Ref-Id}"
+      },
+      "DownstreamPathTemplate": "/api/clazz",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "clazzservice",
+          "Port": 80
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/clazz/{Id}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "AddHeadersToRequest": {
+        "X-Ref-Id": "{Request.Headers.X-Ref-Id}"
+      },
+      "DownstreamPathTemplate": "/api/clazz/{Id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "clazzservice",
+          "Port": 80
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      - SA_PASSWORD=Str0ngPass123
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Developer
+    ports:
+      - "14330:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+    networks:
+      - backend
+
+  studentservice:
+    build:
+      context: ./StudentService
+    container_name: studentservice
+    ports:
+      - "5001:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=StudentDb;User=sa;Password=Str0ngPass123;TrustServerCertificate=True;Encrypt=False;
+    depends_on:
+      - sqlserver
+    networks:
+      - backend
+
+  teacherservice:
+    build:
+      context: ./TeacherService
+    container_name: teacherservice
+    ports:
+      - "5002:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=TeacherDb;User=sa;Password=Str0ngPass123;TrustServerCertificate=True;Encrypt=False;
+    depends_on:
+      - sqlserver
+    networks:
+      - backend
+
+  clazzservice:
+    build:
+      context: ./ClazzService
+    container_name: clazzservice
+    ports:
+      - "5226:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=ClazzDb;User=sa;Password=Str0ngPass123;TrustServerCertificate=True;Encrypt=False;
+    depends_on:
+      - sqlserver
+    networks:
+      - backend
+
+  ocelotgateway:
+    build:
+      context: ./OcelotGateway
+    container_name: ocelotgateway
+    ports:
+      - "5003:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=GatewayDb;User=sa;Password=Str0ngPass123;TrustServerCertificate=True;Encrypt=False;
+    depends_on:
+      - sqlserver
+      - studentservice
+      - teacherservice
+      - clazzservice
+    networks:
+      - backend
+
+volumes:
+  sql_data:
+
+networks:
+  backend:
+    driver: bridge
