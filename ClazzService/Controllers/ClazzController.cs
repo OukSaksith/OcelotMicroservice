@@ -1,32 +1,61 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using ClazzService.DTO;
 using ClazzService.Service;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ClazzService.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    public class ClazzController : ControllerBase
+    [Route("api/v1/clazzes")]
+    public class ClazzesController : ControllerBase
     {
-        private readonly IClazzRepository _clazzRepository;
-        public ClazzController(IClazzRepository clazzRepository) =>
-            (_clazzRepository) = (clazzRepository);
+        private readonly IClazzService _svc;
 
-
-        [HttpGet]
-        public IActionResult GetAll()
+        public ClazzesController(IClazzService svc)
         {
-            return Ok(_clazzRepository.GetAll());
+            _svc = svc;
         }
 
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
-        {
-            var student = _clazzRepository.Get(id);
-            if(student is null) 
-                return NotFound();
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ClazzDto>>> GetAll()
+            => Ok(await _svc.GetAllAsync());
 
-            return Ok(student);
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<ClazzDto>> Get(int id)
+        {
+            var c = await _svc.GetByIdAsync(id);
+            if (c == null) return NotFound();
+            return Ok(c);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<ClazzDto>> Create(ClazzDto dto)
+        {
+            var created = await _svc.CreateAsync(dto);
+            return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update(int id, ClazzDto dto)
+        {
+            if (id != dto.Id) return BadRequest("ID mismatch");
+            if (!await _svc.UpdateAsync(id, dto)) return NotFound();
+            return NoContent();
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (!await _svc.DeleteAsync(id)) return NotFound();
+            return NoContent();
+        }
+
+        [HttpPost("{id:int}/assign")]
+        public async Task<IActionResult> Assign(int id, AssignClassDto assignDto)
+        {
+            var ok = await _svc.AssignClassAsync(id, assignDto);
+            if (!ok) return NotFound();
+            return NoContent();
         }
     }
 }

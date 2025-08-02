@@ -1,25 +1,64 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using StudentService;
 using StudentService.Service;
+using StudentService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// DbContext
+var connection = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
+builder.Services.AddDbContext<StudentDbContext>(options =>
+    options.UseSqlServer(connection));
+
+// Business service
+builder.Services.AddScoped<IStudentService, StudentServiceImpl>();
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IStudentRepository, StudentImpl>();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "StudentService API",
+        Version = "v1",
+        Description = "CRUD API for Students"
+    });
+});
+
 builder.WebHost.UseUrls("http://*:80");
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// Auto-migrate in development
+using (var scope = app.Services.CreateScope())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    var db = scope.ServiceProvider.GetRequiredService<StudentDbContext>();
+    var pending = await db.Database.GetPendingMigrationsAsync();
+    try
+    {
+        if (pending.Any())
+        {
+            await db.Database.MigrateAsync();
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Database migration failed: {ex.Message}");
+        throw;
+    }
 }
 
-app.UseAuthorization();
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "StudentService v1");
+    c.RoutePrefix = string.Empty;
+});
 
 app.MapControllers();
 

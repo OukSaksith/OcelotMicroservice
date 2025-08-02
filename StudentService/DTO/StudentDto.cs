@@ -1,10 +1,12 @@
-﻿namespace StudentService.Model
+﻿namespace StudentService.DTO
 {
-    public class Student
+    public class StudentDto
     {
+        
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public string Email { get; set; } = null!;
-        public int? ClazzId { get; set; } 
+        public int? ClazzId { get; set; }
     }
 }
+

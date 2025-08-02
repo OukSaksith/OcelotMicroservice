@@ -32,9 +32,13 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<TeacherDbContext>();
+    var pending = await db.Database.GetPendingMigrationsAsync();
     try
     {
-        db.Database.Migrate();
+        if (pending.Any())
+        {
+            await db.Database.MigrateAsync();
+        }
     }
     catch (Exception ex)
     {
