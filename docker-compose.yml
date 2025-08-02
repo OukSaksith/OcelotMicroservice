@@ -67,6 +67,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=GatewayDb;User=sa;Password=Str0ngPass123;TrustServerCertificate=True;Encrypt=False;
+      - Jwt__Secret=Str0ngPass123
+      - Jwt__Issuer=OcelotGateway
+      - Jwt__Audience=OcelotClients
     depends_on:
       - sqlserver
       - studentservice

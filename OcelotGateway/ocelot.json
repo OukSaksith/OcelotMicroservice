@@ -1,98 +1,275 @@
+//{
+//  "GlobalConfiguration": {
+//    "BaseUrl": "http://localhost:5003"
+//  },
+//  "Routes": [
+//    {
+//      "UpstreamPathTemplate": "/gateway/students",
+//      "UpstreamHttpMethod": [ "Get" ],
+//      "AddHeadersToRequest": {
+//        "X-Ref-Id": "{Request.Headers.X-Ref-Id}"
+//      },
+//      "DownstreamPathTemplate": "/api/student",
+//      "DownstreamScheme": "http",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "studentservice",
+//          "Port": 80
+//        }
+//      ]
+//    },
+//    {
+//      "UpstreamPathTemplate": "/gateway/students/{Id}",
+//      "UpstreamHttpMethod": [ "Get" ],
+//      "AddHeadersToRequest": {
+//        "X-Ref-Id": "{Request.Headers.X-Ref-Id}"
+//      },
+//      "DownstreamPathTemplate": "/api/student/{Id}",
+//      "DownstreamScheme": "http",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "studentservice",
+//          "Port": 80
+//        }
+//      ]
+//    },
+//    {
+//      "UpstreamPathTemplate": "/gateway/teachers",
+//      "UpstreamHttpMethod": [ "Get" ],
+//      "AddHeadersToRequest": {
+//        "X-Ref-Id": "{Request.Headers.X-Ref-Id}"
+//      },
+//      "DownstreamPathTemplate": "/api/teacher",
+//      "DownstreamScheme": "http",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "teacherservice",
+//          "Port": 80
+//        }
+//      ]
+//    },
+//    {
+//      "UpstreamPathTemplate": "/gateway/teacher/{Id}",
+//      "UpstreamHttpMethod": [ "Get" ],
+//      "AddHeadersToRequest": {
+//        "X-Ref-Id": "{Request.Headers.X-Ref-Id}"
+//      },
+//      "DownstreamPathTemplate": "/api/teachers/{Id}",
+//      "DownstreamScheme": "http",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "teacherservice",
+//          "Port": 80
+//        }
+//      ]
+//    },
+
+//    {
+//      "UpstreamPathTemplate": "/gateway/clazz",
+//      "UpstreamHttpMethod": [ "Get" ],
+//      "AddHeadersToRequest": {
+//        "X-Ref-Id": "{Request.Headers.X-Ref-Id}"
+//      },
+//      "DownstreamPathTemplate": "/api/clazz",
+//      "DownstreamScheme": "http",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "clazzservice",
+//          "Port": 80
+//        }
+//      ]
+//    },
+//    {
+//      "UpstreamPathTemplate": "/gateway/clazz/{Id}",
+//      "UpstreamHttpMethod": [ "Get" ],
+//      "AddHeadersToRequest": {
+//        "X-Ref-Id": "{Request.Headers.X-Ref-Id}"
+//      },
+//      "DownstreamPathTemplate": "/api/clazz/{Id}",
+//      "DownstreamScheme": "http",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "clazzservice",
+//          "Port": 80
+//        }
+//      ]
+//    }
+//  ]
+//}
 {
-  "GlobalConfiguration": {
-    "BaseUrl": "http://localhost:5003"
-  },
   "Routes": [
     {
-      "UpstreamPathTemplate": "/gateway/students",
-      "UpstreamHttpMethod": [ "Get" ],
-      "AddHeadersToRequest": {
-        "X-Ref-Id": "{Request.Headers.X-Ref-Id}"
-      },
-      "DownstreamPathTemplate": "/api/student",
+      "UpstreamPathTemplate": "/auth/register",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/v1/auth/register",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "studentservice",
+          "Host": "ocelotgateway",
           "Port": 80
         }
-      ]
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "None",
+        "AllowedScopes": []
+      }
     },
     {
-      "UpstreamPathTemplate": "/gateway/students/{Id}",
-      "UpstreamHttpMethod": [ "Get" ],
-      "AddHeadersToRequest": {
-        "X-Ref-Id": "{Request.Headers.X-Ref-Id}"
-      },
-      "DownstreamPathTemplate": "/api/student/{Id}",
+      "UpstreamPathTemplate": "/auth/login",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/v1/auth/login",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "studentservice",
+          "Host": "ocelotgateway",
           "Port": 80
         }
-      ]
-    },
-    {
-      "UpstreamPathTemplate": "/gateway/teachers",
-      "UpstreamHttpMethod": [ "Get" ],
-      "AddHeadersToRequest": {
-        "X-Ref-Id": "{Request.Headers.X-Ref-Id}"
-      },
-      "DownstreamPathTemplate": "/api/teacher",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "teacherservice",
-          "Port": 80
-        }
-      ]
-    },
-    {
-      "UpstreamPathTemplate": "/gateway/teacher/{Id}",
-      "UpstreamHttpMethod": [ "Get" ],
-      "AddHeadersToRequest": {
-        "X-Ref-Id": "{Request.Headers.X-Ref-Id}"
-      },
-      "DownstreamPathTemplate": "/api/teachers/{Id}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "teacherservice",
-          "Port": 80
-        }
-      ]
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "None",
+        "AllowedScopes": []
+      }
     },
 
     {
-      "UpstreamPathTemplate": "/gateway/clazz",
-      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/gateway/teachers",
+      "UpstreamHttpMethod": [ "GET", "POST" ],
       "AddHeadersToRequest": {
         "X-Ref-Id": "{Request.Headers.X-Ref-Id}"
       },
-      "DownstreamPathTemplate": "/api/clazz",
+      "DownstreamPathTemplate": "/api/v1/teachers",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "clazzservice",
+          "Host": "teacherservice",
           "Port": 80
         }
-      ]
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
     },
     {
-      "UpstreamPathTemplate": "/gateway/clazz/{Id}",
-      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/gateway/teachers/{everything}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ],
       "AddHeadersToRequest": {
         "X-Ref-Id": "{Request.Headers.X-Ref-Id}"
       },
-      "DownstreamPathTemplate": "/api/clazz/{Id}",
+      "DownstreamPathTemplate": "/api/v1/teachers/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "teacherservice",
+          "Port": 80
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+
+    {
+      "UpstreamPathTemplate": "/gateway/students",
+      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "AddHeadersToRequest": {
+        "X-Ref-Id": "{Request.Headers.X-Ref-Id}"
+      },
+      "DownstreamPathTemplate": "/api/v1/students",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "studentservice",
+          "Port": 80
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/students/{everything}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ],
+      "AddHeadersToRequest": {
+        "X-Ref-Id": "{Request.Headers.X-Ref-Id}"
+      },
+      "DownstreamPathTemplate": "/api/v1/students/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "studentservice",
+          "Port": 80
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+
+    {
+      "UpstreamPathTemplate": "/gateway/clazzes",
+      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "AddHeadersToRequest": {
+        "X-Ref-Id": "{Request.Headers.X-Ref-Id}"
+      },
+      "DownstreamPathTemplate": "/api/v1/clazzes",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "clazzservice",
           "Port": 80
         }
-      ]
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/clazzes/{everything}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ],
+      "AddHeadersToRequest": {
+        "X-Ref-Id": "{Request.Headers.X-Ref-Id}"
+      },
+      "DownstreamPathTemplate": "/api/v1/clazzes/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "clazzservice",
+          "Port": 80
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+
+    {
+      "UpstreamPathTemplate": "/gateway/clazzes/{id}/assign",
+      "UpstreamHttpMethod": [ "POST" ],
+      "AddHeadersToRequest": {
+        "X-Ref-Id": "{Request.Headers.X-Ref-Id}"
+      },
+      "DownstreamPathTemplate": "/api/v1/clazzes/{id}/assign",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "clazzservice",
+          "Port": 80
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
     }
-  ]
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:80",
+    "RequestIdKey": "X-Ref-Id"
+  }
 }
