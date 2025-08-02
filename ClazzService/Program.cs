@@ -1,5 +1,6 @@
 using ClazzService;
 using ClazzService.Service;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -39,23 +40,38 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ClazzDbContext>();
-    try
+    var maxAttempts = 8;
+    var delay = TimeSpan.FromSeconds(5);
+    for (int attempt = 1; attempt <= maxAttempts; attempt++)
     {
-        var pending = await db.Database.GetPendingMigrationsAsync();
-        if (pending.Any())
+        try
         {
-            Console.WriteLine("Applying pending migrations: " + string.Join(", ", pending));
-            await db.Database.MigrateAsync();
+            var pending = await db.Database.GetPendingMigrationsAsync();
+            if (pending.Any())
+            {
+                Console.WriteLine("Applying pending migrations: " + string.Join(", ", pending));
+                await db.Database.MigrateAsync();
+            }
+            else
+            {
+                Console.WriteLine("No pending migrations.");
+            }
+            break; // success
         }
-        else
+        catch (SqlException sqlEx) when (sqlEx.Number == 1801)
         {
-            Console.WriteLine("No pending migrations.");
+            // Database already exists race condition when EF tried to create it concurrently—safe to ignore.
+            Console.WriteLine($"Ignored SQL error 1801 (database exists): {sqlEx.Message}");
+            // Try again to apply migrations (the loop will repeat)
         }
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Database migration failed: {ex.Message}");
-        throw;
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Attempt {attempt} - database migration failed: {ex.Message}");
+            if (attempt == maxAttempts)
+                throw;
+            await Task.Delay(delay);
+            delay = delay * 2;
+        }
     }
 }
 

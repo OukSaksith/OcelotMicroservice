@@ -27,7 +27,8 @@ namespace OcelotGateway
                 issuer: _config["Jwt:Issuer"],
                 audience: _config["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(8),
+                //expires: DateTime.UtcNow.AddHours(8),
+                expires: DateTime.UtcNow.AddMinutes(5),
                 signingCredentials: creds
             );
             return new JwtSecurityTokenHandler().WriteToken(token);

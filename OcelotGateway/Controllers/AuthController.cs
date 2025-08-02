@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OcelotGateway.DTO;
 using OcelotGateway.Model;
@@ -6,7 +7,7 @@ using OcelotGateway.Model;
 namespace OcelotGateway.Controllers
 {
     [ApiController]
-    [Route("api/v1/auth")]
+    [Route("gateway/auth")]
     public class AuthController : ControllerBase
     {
         private readonly GatewayDbContext _db;
