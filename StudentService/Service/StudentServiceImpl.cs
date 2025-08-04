@@ -23,7 +23,12 @@ using System.Reflection;
                     Id = s.Id,
                     Name = s.Name,
                     Email = s.Email,
-                    ClazzId = s.ClazzId
+                    ClazzId = s.ClazzId,
+                    PhoneNumber = s.PhoneNumber,
+                    Address = s.Address,
+                    DateOfBirth = s.DateOfBirth,
+                    EnrollmentDate = s.EnrollmentDate ?? DateTime.UtcNow
+
                 })
                 .ToListAsync();
         }
@@ -37,7 +42,11 @@ using System.Reflection;
                 Id = s.Id,
                 Name = s.Name,
                 Email = s.Email,
-                ClazzId = s.ClazzId
+                ClazzId = s.ClazzId,
+                PhoneNumber = s.PhoneNumber,
+                Address = s.Address,
+                DateOfBirth = s.DateOfBirth,
+                EnrollmentDate = s.EnrollmentDate ?? DateTime.UtcNow
             };
         }
 
@@ -47,7 +56,11 @@ using System.Reflection;
             {
                 Name = dto.Name,
                 Email = dto.Email,
-                ClazzId = dto.ClazzId
+                ClazzId = dto.ClazzId,
+                PhoneNumber = dto.PhoneNumber,
+                Address = dto.Address,
+                DateOfBirth = dto.DateOfBirth,
+                EnrollmentDate = dto.EnrollmentDate ?? DateTime.UtcNow
             };
             _db.Students.Add(entity);
             await _db.SaveChangesAsync();
@@ -62,7 +75,11 @@ using System.Reflection;
             existing.Name = dto.Name;
             existing.Email = dto.Email;
             existing.ClazzId = dto.ClazzId;
-            await _db.SaveChangesAsync();
+            existing.PhoneNumber = dto.PhoneNumber;
+            existing.Address = dto.Address;
+            existing.DateOfBirth = dto.DateOfBirth;
+            existing.EnrollmentDate = dto.EnrollmentDate ?? DateTime.UtcNow;
+        await _db.SaveChangesAsync();
             return true;
         }
 

@@ -11,19 +11,19 @@ namespace TeacherService.Services
 
         public async Task<IEnumerable<TeacherDto>> GetAllAsync()
             => await _db.Teachers
-                .Select(t => new TeacherDto { Id = t.Id, Name = t.Name, Subject = t.Subject })
+                .Select(t => new TeacherDto { Id = t.Id, Name = t.Name, Subject = t.Subject , Email = t.Email, Address = t.Address, PhoneNumber = t.PhoneNumber})
                 .ToListAsync();
 
         public async Task<TeacherDto?> GetByIdAsync(int id)
         {
             var t = await _db.Teachers.FindAsync(id);
             if (t == null) return null;
-            return new TeacherDto { Id = t.Id, Name = t.Name, Subject = t.Subject };
+            return new TeacherDto { Id = t.Id, Name = t.Name, Subject = t.Subject, Email = t.Email, Address = t.Address, PhoneNumber = t.PhoneNumber };
         }
 
         public async Task<TeacherDto> CreateAsync(TeacherDto dto)
         {
-            var entity = new Teacher { Name = dto.Name, Subject = dto.Subject };
+            var entity = new Teacher { Name = dto.Name, Subject = dto.Subject, Email = dto.Email, Address = dto.Address, PhoneNumber = dto.PhoneNumber };
             _db.Teachers.Add(entity);
             await _db.SaveChangesAsync();
             dto.Id = entity.Id;
@@ -36,6 +36,9 @@ namespace TeacherService.Services
             if (existing == null) return false;
             existing.Name = dto.Name;
             existing.Subject = dto.Subject;
+            existing.Email = dto.Email;
+            existing.Address = dto.Address;
+            existing.PhoneNumber = dto.PhoneNumber;
             await _db.SaveChangesAsync();
             return true;
         }

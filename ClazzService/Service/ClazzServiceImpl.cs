@@ -23,7 +23,10 @@ namespace ClazzService.Service
                     Id = c.Id,
                     Title = c.Title,
                     TeacherId = c.TeacherId,
-                    StudentIds = c.StudentAssignments.Select(sa => sa.StudentId).ToList()
+                    StudentIds = c.StudentAssignments.Select(sa => sa.StudentId).ToList(),
+                    Description = c.Description,
+                    Capacity = c.Capacity,
+                    IsActive = c.IsActive
                 })
                 .ToListAsync();
         }
@@ -39,7 +42,10 @@ namespace ClazzService.Service
                 Id = c.Id,
                 Title = c.Title,
                 TeacherId = c.TeacherId,
-                StudentIds = c.StudentAssignments.Select(sa => sa.StudentId).ToList()
+                StudentIds = c.StudentAssignments.Select(sa => sa.StudentId).ToList(),
+                Description = c.Description,
+                Capacity = c.Capacity,
+                IsActive = c.IsActive
             };
         }
 
@@ -48,7 +54,11 @@ namespace ClazzService.Service
             var entity = new Clazz
             {
                 Title = dto.Title,
-                TeacherId = dto.TeacherId
+                TeacherId = dto.TeacherId,
+                Description = dto.Description,
+                Capacity = dto.Capacity,
+                IsActive = dto.IsActive
+
             };
             if (dto.StudentIds != null)
             {
@@ -73,6 +83,10 @@ namespace ClazzService.Service
 
             existing.Title = dto.Title;
             existing.TeacherId = dto.TeacherId;
+            existing.Description = dto.Description;
+            existing.Capacity = dto.Capacity;
+            existing.IsActive = dto.IsActive;
+
 
             // Sync student assignments
             var incoming = dto.StudentIds ?? new List<int>();
