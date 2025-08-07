@@ -1,0 +1,147 @@
+﻿@page "/student"
+@using WebUI.Components.Models
+@inject ApiService ApiService
+<h3 class="d-flex justify-content-between align-items-center">
+    <span>Student</span>
+    <button class="btn btn-success">
+        <i class="bi bi-plus-circle me-1"></i> Add Student
+    </button>
+</h3>
+@if (students == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Class ID</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Date of Birth</th>
+                <th>Enrollment Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < students.Count; i++)
+            {
+                var student = students[i];
+                <tr>
+                    <td>@(i + 1)</td>
+                    <td>@student.Name</td>
+                    <td>@student.Email</td>
+                    <td>@student.ClazzId</td>
+                    <td>@student.PhoneNumber</td>
+                    <td>@student.Address</td>
+                    <td>@(student.DateOfBirth?.ToString("yyyy-MM-dd") ?? "-")</td>
+                    <td>@(student.EnrollmentDate?.ToString("yyyy-MM-dd HH:mm:ss") ?? "-")</td>
+                    @* <td>
+                        <button class="btn btn-sm btn-primary me-1" @onclick="() => EditStudent(student.Id)">Edit</button>
+                        <button class="btn btn-sm btn-info me-1" @onclick="() => ViewStudent(student.Id)">View</button>
+                        <button class="btn btn-sm btn-danger" @onclick="() => DeleteStudent(student.Id)">Delete</button>
+                    </td> *@
+                    <td>
+                        <button class="btn btn-sm btn-primary me-1" >Edit</button>
+                        <button class="btn btn-sm btn-info me-1">View</button>
+                        <button class="btn btn-sm btn-danger">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @* Add Form
+    <div class="modal fade @(showAddModal ? "show d-block" : "")" tabindex="-1" style="background-color: rgba(0, 0, 0, 0.5);">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Student</h5>
+                    <button type="button" class="btn-close" @onclick="HideAddModal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label>Name</label>
+                        <input class="form-control" @bind="newStudent.Name" />
+                    </div>
+                    <div class="mb-3">
+                        <label>Email</label>
+                        <input type="email" class="form-control" @bind="newStudent.Email" />
+                    </div>
+                    <div class="mb-3">
+                        <label>Class ID</label>
+                        <input type="number" class="form-control" @bind="newStudent.ClazzId" />
+                    </div>
+                    <div class="mb-3">
+                        <label>Phone Number</label>
+                        <input class="form-control" @bind="newStudent.PhoneNumber" />
+                    </div>
+                    <div class="mb-3">
+                        <label>Address</label>
+                        <input class="form-control" @bind="newStudent.Address" />
+                    </div>
+                    <div class="mb-3">
+                        <label>Date of Birth</label>
+                        <input type="date" class="form-control" @bind="newStudent.DateOfBirth" />
+                    </div>
+                    <div class="mb-3">
+                        <label>Enrollment Date</label>
+                        <input type="datetime-local" class="form-control" @bind="newStudent.EnrollmentDate" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" @onclick="HideAddModal">Cancel</button>
+                    <button class="btn btn-primary" @onclick="SaveStudent">Save</button>
+                </div>
+            </div>
+        </div>
+    </div> *@
+
+}
+
+@code {
+    private List<StudentModel> students;
+
+    protected override async Task OnInitializedAsync()
+    {
+        students = await ApiService.GetStudentsAsync();
+    }
+
+//     void EditStudent(int id)
+//     {
+//         Navigate to edit page, e.g. /students/edit/5
+//         Navigation.NavigateTo($"/students/edit/{id}");
+//     }
+
+//     void ViewStudent(int id)
+//     {
+//         Navigate to view/details page, e.g. /students/view/5
+//         Navigation.NavigateTo($"/students/view/{id}");
+//     }
+
+//     async Task DeleteStudent(int id)
+//     {
+//         Confirm delete
+//         if (await JSRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete student #{id}?"))
+//         {
+//             var success = await StudentService.DeleteStudentAsync(id);
+//             if (success)
+//             {
+//                 Refresh list after delete
+//                 students = await StudentService.GetStudentsAsync();
+//                 StateHasChanged();
+//             }
+//             else
+//             {
+//                 Handle failure (show message, etc.)
+//                 Console.WriteLine("Delete failed");
+//             }
+//         }
+//     }
+
+//     [Inject] IJSRuntime JSRuntime { get; set; }
+}

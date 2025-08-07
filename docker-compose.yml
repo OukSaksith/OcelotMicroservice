@@ -78,6 +78,15 @@ services:
     networks:
       - backend
 
+  webui:
+    build:
+      context: ./WebUI
+    container_name: webui
+    ports:
+      - "8082:8082"
+    networks:
+      - backend
+
 volumes:
   sql_data:
 
