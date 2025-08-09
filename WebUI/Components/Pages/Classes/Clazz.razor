@@ -1,0 +1,113 @@
+﻿@page "/clazz"
+@inject NavigationManager NavigationManager
+@inject ApiService ApiService
+@inject IJSRuntime JSRuntime
+@using WebUI.Components.Models
+
+
+<h3 class="d-flex justify-content-between align-items-center">
+    <span>Class Management</span>
+    <button class="btn btn-success" @onclick="NavigateToAddClazz" type="button">
+        New
+    </button>
+</h3>
+
+@if (clazzes == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Title</th>
+                <th>Teacher Name</th>
+                <th>Description</th>
+                <th>Capacity</th>
+                <th>IsActive</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < clazzes.Count; i++)
+            {
+                var clazz = clazzes[i];
+                <tr>
+                    <td>@(i + 1)</td>
+                    <td>@clazz.Title</td>
+                    <td>@clazz.TeacherName</td>
+                    <td>@clazz.Description</td>
+                    <td>@clazz.Capacity</td>
+                    <td>@clazz.IsActive</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary me-1" @onclick="() => NavigateToUpdateClazz(clazz.Id)">Edit</button>
+                        <button class="btn btn-sm btn-info me-1" @onclick="() => NavigateToViewClazz(clazz.Id)">View</button>
+                        <button class="btn btn-sm btn-danger" @onclick="() => NavigateToDeleteClazz(clazz.Id)">Delete</button>
+                        <button class="btn btn-sm btn-warning" @onclick="() => NavigateToAssignClazz(clazz.Id)">Assign</button>
+                    </td>
+                
+                </tr>
+            }
+        </tbody>
+    </table>
+ 
+
+}
+
+@code {
+
+    private List<ClazzModel> clazzes;
+
+    protected override async Task OnInitializedAsync()
+    {
+        clazzes = await ApiService.GetClazzesAsync();
+    }
+
+    private void NavigateToAddClazz()
+    {
+        NavigationManager.NavigateTo("/clazz/add");
+    }
+
+    private void NavigateToUpdateClazz(int id)
+    {
+
+        NavigationManager.NavigateTo($"/clazz/update/{id}");
+    }
+
+
+    private void NavigateToViewClazz(int id)
+    {
+
+        NavigationManager.NavigateTo($"/clazz/view/{id}");
+    }
+    private async Task NavigateToDeleteClazz(int id)
+    {
+
+        bool confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this?");
+        if (confirmed)
+        {
+            await DeleteClazz(id);
+        }
+    }
+
+    private async Task DeleteClazz(int id)
+    {
+        Console.WriteLine($"Deleted Class with id: {id}");
+        bool isDelete = await ApiService.DeleteClazzAsync(id);
+        if(isDelete)
+        {
+            NavigationManager.NavigateTo("/clazz", forceLoad: true);
+        }
+
+    }
+
+    private void NavigateToAssignClazz(int id)
+    {
+
+        NavigationManager.NavigateTo($"/clazz/assign/{id}");
+    }
+
+
+}

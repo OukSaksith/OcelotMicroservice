@@ -1,0 +1,61 @@
+﻿@page "/teacher/add"
+@inject NavigationManager NavigationManager
+@inject ApiService ApiService
+@using WebUI.Components.Models
+
+
+<h3>Teacher Management - ADD</h3>
+
+<EditForm Model="newTeacher" OnValidSubmit="SubmitAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label>Name</label>
+        <input class="form-control" @bind="newTeacher.Name" />
+    </div>
+    <div class="mb-3">
+        <label>Email</label>
+        <input class="form-control" @bind="newTeacher.Email" />
+    </div>
+    <div class="mb-3">
+        <label>Phone</label>
+        <input class="form-control" @bind="newTeacher.PhoneNumber" />
+    </div>
+    <div class="mb-3">
+        <label>Subject</label>
+        <input class="form-control" @bind="newTeacher.Subject" />
+    </div>
+    <div class="mb-3">
+        <label>Address</label>
+        <input class="form-control" @bind="newTeacher.Address" />
+    </div>
+   
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <button class="btn btn-secondary" @onclick="Cancel">Cancel</button>
+</EditForm>
+
+@code {
+    private TeacherModel newTeacher = new();
+
+    private async Task SubmitAsync()
+    {
+        bool success = await ApiService.SubmitTeacherAsync(newTeacher);
+        if (success)
+        {
+            // message = "Student submitted successfully!";
+            NavigationManager.NavigateTo("/teacher");
+        }
+        else
+        {
+            // message = "Failed to submit student.";
+        }
+    }
+
+    private void Cancel()
+    {
+        NavigationManager.NavigateTo("/teacher"); // Cancel and go back
+    }
+
+}

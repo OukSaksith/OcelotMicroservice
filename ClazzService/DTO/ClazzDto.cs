@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ClazzService.Model;
+using System.ComponentModel.DataAnnotations;
 
 namespace ClazzService.DTO
 {

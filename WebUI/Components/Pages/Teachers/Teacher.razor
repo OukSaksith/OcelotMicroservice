@@ -1,0 +1,107 @@
+﻿@page "/teacher"
+@inject NavigationManager NavigationManager
+@inject ApiService ApiService
+@inject IJSRuntime JSRuntime
+@using WebUI.Components.Models
+
+
+<h3 class="d-flex justify-content-between align-items-center">
+    <span>Teacher Management</span>
+    <button class="btn btn-success" @onclick="NavigateToAddTeacher" type="button">
+       New
+    </button>
+</h3>
+
+@if (teachers == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Subject</th>
+                <th>Address</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < teachers.Count; i++)
+            {
+                var teacher = teachers[i];
+                <tr>
+                    <td>@(i + 1)</td>
+                    <td>@teacher.Name</td>
+                    <td>@teacher.Email</td>
+                    <td>@teacher.PhoneNumber</td>
+                    <td>@teacher.Subject</td>
+                    <td>@teacher.Address</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary me-1" @onclick="() => NavigateToUpdateTeacher(teacher.Id)">Edit</button>
+                        <button class="btn btn-sm btn-info me-1" @onclick="() => NavigateToViewTeacher(teacher.Id)">View</button>
+                        <button class="btn btn-sm btn-danger" @onclick="() => NavigateToDeleteTeacher(teacher.Id)">Delete</button>
+                    </td>
+                
+                </tr>
+            }
+        </tbody>
+    </table>
+ 
+
+}
+
+@code {
+
+    private List<TeacherModel> teachers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        teachers = await ApiService.GetTeachersAsync();
+    }
+
+    private void NavigateToAddTeacher()
+    {
+        NavigationManager.NavigateTo("/teacher/add");
+    }
+
+    private void NavigateToUpdateTeacher(int id)
+    {
+
+        NavigationManager.NavigateTo($"/teacher/update/{id}");
+    }
+
+
+    private void NavigateToViewTeacher(int id)
+    {
+
+        NavigationManager.NavigateTo($"/teacher/view/{id}");
+    }
+    private async Task NavigateToDeleteTeacher(int id)
+    {
+
+        bool confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this?");
+        if (confirmed)
+        {
+            await DeleteTeacher(id);
+        }
+    }
+
+    private async Task DeleteTeacher(int id)
+    {
+        Console.WriteLine($"Deleted teacher with id: {id}");
+        bool isDelete = await ApiService.DeleteTeacherAsync(id);
+        if(isDelete)
+        {
+            NavigationManager.NavigateTo("/teacher", forceLoad: true);
+        }
+
+     
+    }
+
+
+}

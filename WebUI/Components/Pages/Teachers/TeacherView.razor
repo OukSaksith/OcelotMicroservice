@@ -1,0 +1,70 @@
+﻿@page "/teacher/view/{id:int}"
+@using WebUI.Components.Models
+@inject NavigationManager NavigationManager
+@inject ApiService ApiService
+
+<h3>Teacher Management - VIEW</h3>
+
+<EditForm Model="teacher" OnValidSubmit="SubmitAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label>Name</label>
+        <input readonly class="form-control" @bind="teacher.Name" />
+    </div>
+    <div class="mb-3">
+        <label>Email</label>
+        <input readonly class="form-control" @bind="teacher.Email" />
+    </div>
+    <div class="mb-3">
+        <label>Phone</label>
+        <input readonly class="form-control" @bind="teacher.PhoneNumber" />
+    </div>
+    <div class="mb-3">
+        <label>Subject</label>
+        <input readonly class="form-control" @bind="teacher.Subject" />
+    </div>
+    <div class="mb-3">
+        <label>Address</label>
+        <input readonly class="form-control" @bind="teacher.Address" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <button class="btn btn-secondary" @onclick="Cancel">Cancel</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    private TeacherModel teacher = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await ApiService.GetTeachersAsyncById(id);
+        if (result != null)
+        {
+            teacher = result;
+        }
+    }
+    private async Task SubmitAsync()
+    {
+        bool success = await ApiService.UpdateTeacherAsync(teacher, id);
+        if (success)
+        {
+            // message = "Student submitted successfully!";
+            NavigationManager.NavigateTo("/teacher");
+        }
+        else
+        {
+            // message = "Failed to submit student.";
+        }
+    }
+
+    private void Cancel()
+    {
+        NavigationManager.NavigateTo("/teacher"); // Cancel and go back
+    }
+
+}

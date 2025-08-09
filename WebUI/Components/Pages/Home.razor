@@ -1,7 +1,51 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+@page "/dashboard"
+@inject ApiService ApiService
 
-<h1>Hello, world!</h1>
+<h3>DASHBOARD</h3>
 
-Welcome to your new app.
+<div class="row">
+    <!-- Total Students -->
+    <div class="col-md-4 mb-3">
+        <div class="card text-white bg-primary shadow">
+            <div class="card-body">
+                <h5 class="card-title">Total Students</h5>
+                <h2>@totalStudents</h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Teachers -->
+    <div class="col-md-4 mb-3">
+        <div class="card text-white bg-success shadow">
+            <div class="card-body">
+                <h5 class="card-title">Total Teachers</h5>
+                <h2>@totalTeachers</h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Classes -->
+    <div class="col-md-4 mb-3">
+        <div class="card text-white bg-warning shadow">
+            <div class="card-body">
+                <h5 class="card-title">Total Classes</h5>
+                <h2>@totalClasses</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private int totalStudents;
+    private int totalTeachers;
+    private int totalClasses;
+
+    protected override async Task OnInitializedAsync()
+    {
+        totalStudents = (await ApiService.GetStudentsAsync()).Count();
+        totalTeachers = (await ApiService.GetTeachersAsync()).Count();
+        totalClasses = (await ApiService.GetClazzesAsync()).Count();
+    }
+}
