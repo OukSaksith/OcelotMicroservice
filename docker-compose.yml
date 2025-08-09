@@ -86,6 +86,8 @@ services:
       - "8082:8082"
     networks:
       - backend
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
 
 volumes:
   sql_data:

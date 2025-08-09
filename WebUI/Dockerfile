@@ -1,5 +1,6 @@
 ﻿FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
+ENV ASPNETCORE_ENVIRONMENT=Development
 
 # restore
 COPY *.csproj ./

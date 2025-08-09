@@ -5,7 +5,7 @@ namespace WebUI.Components
     public class ApiService
     {
         private readonly HttpClient _httpClient;
-        private const string BASE_URL = "http://localhost:5003";
+        private const string BASE_URL = "http://host.docker.internal:5003";
 
         public ApiService(HttpClient httpClient)
         {
