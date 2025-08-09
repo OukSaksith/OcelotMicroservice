@@ -21,6 +21,10 @@
         <label>Capacity</label>
         <input readonly class="form-control" @bind="newClazz.Capacity" />
     </div>
+    <div class="mb-3">
+        <label>Teacher</label>
+        <input readonly class="form-control" @bind="newClazz.TeacherName" />
+    </div>
 
     <!-- Students as checkboxes -->
     <div class="mb-3">
@@ -34,7 +38,7 @@
                        checked="checked"
                     >
                 <label class="form-check-label" for="student_@student.Id">
-                    #@student.Id - @student.Name
+                    @student.Name
                 </label>
             </div>
         }
