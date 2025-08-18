@@ -1,6 +1,6 @@
 # OcelotMicroservice
 
-A microservice API gateway powered by [Ocelot](https://ocelot.readthedocs.io/) for .NET, enabling efficient routing, authentication, and service aggregation.
+A microservice API gateway powered by [Ocelot] for .NET, enabling efficient routing, authentication, and service aggregation.
 
 ## Getting Started
 
@@ -30,14 +30,14 @@ docker compose up --build
 ```
 or for older Docker versions:
 ```bash
-docker-compose up
+docker-compose up --build
 ```
 
 This command will build and start all required services as defined in `docker-compose.yml`.
 
 ### 4. Access the API Gateway
 
-Once all services are running, access the gateway at [http://localhost:5000](http://localhost:5000) (or the port specified in your `docker-compose.yml`).
+Once all services are running, access the gateway at [http://localhost:5003](http://localhost:5003) (or the port specified in your `docker-compose.yml`).
 
 ### 5. Stop the services
 
